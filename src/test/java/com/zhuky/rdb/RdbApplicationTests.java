@@ -1,6 +1,8 @@
 package com.zhuky.rdb;
 
 import com.zhuky.rdb.dao.MRowDao;
+import com.zhuky.rdb.describe.TableConfig;
+import com.zhuky.rdb.describe.TableDescribe;
 import com.zhuky.rdb.model.MRow;
 import com.zhuky.redis.RedisUtil;
 import org.junit.Test;
@@ -10,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 @RunWith(SpringRunner.class)
@@ -27,6 +30,12 @@ public class RdbApplicationTests {
 
     @Autowired
     MRowDao mRowDao;
+
+    @Autowired
+    TableDescribe tableDescribe;
+
+    @Autowired
+    TableConfig tableConfig;
 
 //    @Test
 //    public void set() {
@@ -92,5 +101,25 @@ public class RdbApplicationTests {
 
 
     }
+
+    @Autowired
+    Map<String, String[]> tableColumns;
+
+    @Test
+    public void test5(){
+
+        Iterator<Map.Entry<String, String[]>> iterator = tableColumns.entrySet().iterator();
+        while(iterator.hasNext()){
+            Map.Entry<String, String[]> table = iterator.next();
+            String[] columns = table.getValue();
+            for(int i=0; i<columns.length; i++){
+                System.out.println(columns[i]);
+            }
+        }
+
+    }
+
+
+
 
 }

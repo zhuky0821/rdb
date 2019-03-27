@@ -21,14 +21,14 @@ public class RedisConfig extends CachingConfigurerSupport {
      */
     @Bean("redisTemplate")
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory connectionFactory) {
-        System.out.println("实例化redisTemplate开始");
+//        System.out.println("实例化redisTemplate开始");
         // 配置redisTemplate
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());//key序列化
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());//value序列化
         redisTemplate.afterPropertiesSet();
-        System.out.println("实例化redisTemplate结束。" + redisTemplate);
+//        System.out.println("实例化redisTemplate结束。" + redisTemplate);
         return redisTemplate;
     }
 
