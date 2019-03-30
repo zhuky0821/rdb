@@ -32,7 +32,12 @@ public class TableDescribe {
     //列
     private Map<String, String[]> column = new HashMap<>();
 
-    @Bean("tableColumns")
+
+    public Map<String, Map<String, String[]>> getIndex() {
+        return index;
+    }
+
+    //@Bean("tableColumns")
     public Map<String, String[]> tableColumns() {
         column.put("1111", new String[]{});
         return column;
