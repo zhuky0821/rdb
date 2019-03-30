@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -30,12 +31,6 @@ public class RdbApplicationTests {
 
     @Autowired
     MRowDao mRowDao;
-
-    @Autowired
-    TableDescribe tableDescribe;
-
-    @Autowired
-    TableConfig tableConfig;
 
 //    @Test
 //    public void set() {
@@ -102,24 +97,57 @@ public class RdbApplicationTests {
 
     }
 
-    @Autowired
-    Map<String, String[]> tableColumns;
-
     @Test
-    public void test5(){
+    public void test6() throws Exception{
+        Class clazz = Class.forName("com.zhuky.rdb.model.Security");
 
-        Iterator<Map.Entry<String, String[]>> iterator = tableColumns.entrySet().iterator();
-        while(iterator.hasNext()){
-            Map.Entry<String, String[]> table = iterator.next();
-            String[] columns = table.getValue();
-            for(int i=0; i<columns.length; i++){
-                System.out.println(columns[i]);
+//        Field[] fields = clazz.getDeclaredFields("");
+        Field indexs = clazz.getDeclaredField("index");
+        indexs.setAccessible(true);
+        Map<String, String[]> aaa = (Map<String, String[]>) indexs.get(clazz);
+
+        Iterator<Map.Entry<String, String[]>> iterator = aaa.entrySet().iterator();
+        while (iterator.hasNext()){
+            Map.Entry<String, String[]> abc = iterator.next();
+            System.out.println("索引：" + abc.getKey());
+            String[] cols = abc.getValue();
+            for(int i=0; i<cols.length; i++){
+                System.out.println("索引字段："+cols[i]);
             }
         }
 
+
     }
 
+    @Autowired
+    private Map<String, Map<String, String[]>> tableIndex;
 
+    @Test
+    public void test7(){
+        Iterator<Map.Entry<String, Map<String, String[]>>> iterator = tableIndex.entrySet().iterator();
+
+        while (iterator.hasNext()){
+            Map.Entry<String, Map<String, String[]>> table = iterator.next();
+
+            System.out.println("表名：" + table.getKey());
+
+            Map<String, String[]> index = table.getValue();
+
+
+            Iterator<Map.Entry<String, String[]>> entryIterator = index.entrySet().iterator();
+            while (entryIterator.hasNext()){
+                Map.Entry<String, String []> indexName = entryIterator.next();
+                System.out.println("索引名：" + indexName.getKey());
+
+                for(int i=0; i<indexName.getValue().length; i++){
+                    System.out.println("索引字段:" + indexName.getValue()[i]);
+                }
+
+            }
+
+        }
+
+    }
 
 
 }

@@ -42,4 +42,5 @@ public interface MIndexDao {
      */
     public void deleteBatch(Set<MIndex> mIndexSet) throws BusinessException;
 
+
 }
