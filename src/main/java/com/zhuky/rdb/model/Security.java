@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 例子：
  * securityId          60057001         102                202
  * mktId                  1              2                 2
  * securityCode        600570           000001             000002
@@ -13,18 +12,10 @@ import java.util.Map;
  *
  * 在redis中数据存放格式
  *    K                                     V                           类型
- *    row1                        securityId     60057001               表数据
- *                                mktId          1
- *                                securityCode   600570
- *                                securityName   恒生电子
- *   row2                         securityId     102                    表数据
- *                                mktId          2
- *                                securityCode   000001
- *                                securityName   平安银行
- *   row3                         securityId     202                    表数据
- *                                mktId          2
- *                                securityCode   000002
- *                                securityName   万科
+ *   row1                            序列化对象1                        表数据
+ *   row2                            序列化对象2                        表数据
+ *   row3                            序列化对象3                        表数据
+ *   security:60057001            row1                                  主键索
  *   security:60057001            row1                                  主键索引
  *   security:102                 row2                                  主键索引
  *   security:202                 row3                                  主键索引
@@ -58,7 +49,7 @@ public class Security {
         index.put("security", new String[]{"0", "securityId"});
         //唯一索引
         index.put("uSecurity1", new String[]{"1", "mktId", "securityCode"});
-        //非唯一索引
+        //        //非唯一索引
         index.put("nSecurity1", new String[]{"2", "mktId"});
     }
 

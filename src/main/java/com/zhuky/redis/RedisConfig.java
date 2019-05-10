@@ -23,10 +23,12 @@ public class RedisConfig extends CachingConfigurerSupport {
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory connectionFactory) {
 //        System.out.println("实例化redisTemplate开始");
         // 配置redisTemplate
+        System.out.println("redis conn：" + connectionFactory.getHostName() + " " + connectionFactory.getPort());
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());//key序列化
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());//value序列化
+        redisTemplate.setEnableTransactionSupport(true); //开启事务
         redisTemplate.afterPropertiesSet();
 //        System.out.println("实例化redisTemplate结束。" + redisTemplate);
         return redisTemplate;

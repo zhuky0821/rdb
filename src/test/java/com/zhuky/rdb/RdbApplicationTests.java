@@ -3,6 +3,7 @@ package com.zhuky.rdb;
 import com.zhuky.rdb.dao.MRowDao;
 import com.zhuky.rdb.describe.TableConfig;
 import com.zhuky.rdb.describe.TableDescribe;
+import com.zhuky.rdb.describe.TableIndexAndCol;
 import com.zhuky.rdb.model.MRow;
 import com.zhuky.redis.RedisUtil;
 import org.junit.Test;
@@ -120,11 +121,11 @@ public class RdbApplicationTests {
     }
 
     @Autowired
-    private Map<String, Map<String, String[]>> tableIndex;
+    private TableIndexAndCol tableIndexAndCol;
 
     @Test
     public void test7(){
-        Iterator<Map.Entry<String, Map<String, String[]>>> iterator = tableIndex.entrySet().iterator();
+        Iterator<Map.Entry<String, Map<String, String[]>>> iterator = tableIndexAndCol.getIndex().entrySet().iterator();
 
         while (iterator.hasNext()){
             Map.Entry<String, Map<String, String[]>> table = iterator.next();
@@ -145,6 +146,16 @@ public class RdbApplicationTests {
 
             }
 
+        }
+
+        Iterator<Map.Entry<String, String[]>> column = tableIndexAndCol.getColumn().entrySet().iterator();
+        while (column.hasNext()){
+            Map.Entry<String, String[]> col = column.next();
+            System.out.println("表名：" + col.getKey());
+            String[] cols = col.getValue();
+            for(int i=0; i<cols.length; i++){
+                System.out.println("列：" + cols[i]);
+            }
         }
 
     }

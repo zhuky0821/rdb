@@ -33,47 +33,42 @@ public class TableDescribe {
     private Map<String, String[]> column = new HashMap<>();
 
 
-    public Map<String, Map<String, String[]>> getIndex() {
-        return index;
-    }
+    private TableIndexAndCol tableIndexAndCol = new TableIndexAndCol(index, column);
 
-    //@Bean("tableColumns")
-    public Map<String, String[]> tableColumns() {
-        column.put("1111", new String[]{});
-        return column;
-    }
 
-    @Bean("tableIndex")
-    public Map<String, Map<String, String[]>> tableIndex(){
-        initIndex();
-        return index;
+
+    @Bean("tableIndexAndCol")
+    public TableIndexAndCol tableIndexAndCol(){
+        init();
+        return tableIndexAndCol;
     }
 
 
-    private void initIndex(){
+    private void init(){
 
         for(String table : tableList){
 
             try {
                 Class tableClass = Class.forName(table);
-                System.out.println("33333=" + tableClass.getName()+ "   " + tableClass.getSimpleName());
+
+                //列名
+                //获取类成员变量
+                Field[] tableFields = tableClass.getDeclaredFields();
+                String[] tableFieldNames = new String[tableFields.length - 1];
+
+                for(int t=0; t<tableFields.length - 1; t++){
+                    tableFieldNames[t] = tableFields[t].getName();
+                }
+                column.put(tableClass.getSimpleName(), tableFieldNames);
+
+                //索引
                 //获取类成员变量
                 Field indexField = tableClass.getDeclaredField("index");
                 indexField.setAccessible(true);
                 Object o = indexField.get(tableClass);
-                System.out.println("数据类型：" + o.getClass().getTypeName() + "; 值：" + o);
                 Map<String, String[]> indexDeclared = (Map<String, String[]>)o ;
-                System.out.println("indexDeclared=" + indexDeclared);
 
                 Iterator<Map.Entry<String, String[]>> iterator = indexDeclared.entrySet().iterator();
-                while(iterator.hasNext()){
-                    Map.Entry<String, String[]> _name = iterator.next();
-                    System.out.println("111111=" + _name.getKey());
-                    String[] _names = _name.getValue();
-                    for(String s : _names){
-                        System.out.println("222222=" + s);
-                    }
-                }
 
                 index.put(tableClass.getSimpleName(), indexDeclared);
             }
@@ -89,28 +84,5 @@ public class TableDescribe {
         }
     }
 
-
-    private void initColumn(){
-
-        for(String table : tableList){
-
-            try{
-                Class tableClass = Class.forName(table);
-
-                //获取类成员变量
-                Field[] tableFields = tableClass.getDeclaredFields();
-                String[] tableFieldNames = new String[tableFields.length];
-
-                for(int t=0; t<tableFields.length; t++){
-                    tableFieldNames[t] = tableFields[t].getName();
-
-                }
-
-            }catch (ClassNotFoundException e){
-                log.error("无法加载类：" + table);
-            }
-        }
-
-    }
-
 }
+
